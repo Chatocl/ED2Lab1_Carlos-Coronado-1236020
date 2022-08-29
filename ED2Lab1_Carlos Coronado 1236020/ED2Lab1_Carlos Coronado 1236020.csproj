@@ -5,4 +5,12 @@
     <RootNamespace>ED2Lab1_Carlos_Coronado_1236020</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Clases\Clases.csproj" />
+  </ItemGroup>
+
 </Project>

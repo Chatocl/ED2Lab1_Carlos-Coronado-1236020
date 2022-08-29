@@ -1,4 +1,5 @@
 ﻿using ED2Lab1_Carlos_Coronado_1236020.Models;
+using ED2Lab1_Carlos_Coronado_1236020.Models.Datos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,7 +21,7 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(Singleton.Instance.ArbolB.ObtenerLista());
         }
 
         public IActionResult Privacy()

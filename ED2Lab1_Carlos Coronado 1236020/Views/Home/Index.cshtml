@@ -1,8 +1,43 @@
-﻿@{
+﻿@model IEnumerable<ED2Lab1_Carlos_Coronado_1236020.Models.Persona>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<br /><br />
+<h4>Registro de Personas</h4>
+<form asp-action="CargarArchivo" method="post" enctype="multipart/form-data">
+    <input type="file" name="File"  value="Seleccionar archivo" class="btn btn-outline-secondary"/>
+    <input type="submit" value="Importar" class="btn btn-outline-secondary" />
+</form>
+
+<table class="table">
+    <thead style="background-color: #293241 ">
+        <tr>
+            <th style="color:aliceblue">DPI</th>
+            <th style="color:aliceblue">Nombre</th>
+            <th style="color:aliceblue">Fecha de nacimiento</th>
+            <th style="color:aliceblue">Dirección</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DPi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FDB)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Direccion)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

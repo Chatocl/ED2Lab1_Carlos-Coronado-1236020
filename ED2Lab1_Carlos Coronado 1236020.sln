@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ED2Lab1_Carlos Coronado 1236020", "ED2Lab1_Carlos Coronado 1236020\ED2Lab1_Carlos Coronado 1236020.csproj", "{9214C70D-F590-4E2F-BAEC-8947B510BA17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ED2Lab1_Carlos Coronado 1236020", "ED2Lab1_Carlos Coronado 1236020\ED2Lab1_Carlos Coronado 1236020.csproj", "{9214C70D-F590-4E2F-BAEC-8947B510BA17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clases", "Clases\Clases.csproj", "{78A2D242-4A8E-42A2-A6AA-030875166EAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{9214C70D-F590-4E2F-BAEC-8947B510BA17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9214C70D-F590-4E2F-BAEC-8947B510BA17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9214C70D-F590-4E2F-BAEC-8947B510BA17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78A2D242-4A8E-42A2-A6AA-030875166EAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78A2D242-4A8E-42A2-A6AA-030875166EAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78A2D242-4A8E-42A2-A6AA-030875166EAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78A2D242-4A8E-42A2-A6AA-030875166EAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
