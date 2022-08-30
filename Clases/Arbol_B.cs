@@ -18,7 +18,7 @@ namespace Clases
             }
             else
             {
-                min = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(Grado/2)));
+                min = (Grado/2);
                 max = Grado;
                 Root = new Nodo_B<T>(min);
             }
@@ -27,10 +27,14 @@ namespace Clases
         public void Insertar(T Valor) 
         {
             Nodo_B<T> Temp = new Nodo_B<T>();
-            Nodo_B<T> Aux = new Nodo_B<T>();
+            Nodo_B<T> Aux = new Nodo_B<T>(min);
             Temp = Root;
-
-            if (Temp.NumClaves==(2*min-1))
+            if (Temp.NumClaves==0)
+            {
+                Temp.Claves[0] = Valor;
+                Temp.NumClaves++;
+            }
+            else if (Temp.NumClaves==(2*min))
             {
                
                 Root = Aux;
@@ -42,7 +46,7 @@ namespace Clases
             }
             else
             {
-                Ayu_Insertar(Aux, Valor);
+                Ayu_Insertar(Temp, Valor);
             }
         
         }
@@ -86,8 +90,8 @@ namespace Clases
         {
             Nodo_B<T> Aux = new Nodo_B<T>();
             Aux.EsHoja = HNodo.EsHoja;
-            Aux.NumClaves = (min-1);
-            for (int a = 0; a <(min-1) ; a++)
+            Aux.NumClaves = (min);
+            for (int a = 0; a < (min-1) ; a++)
             {
                 Aux.Claves[a]= HNodo.Claves[a+min];
             }
@@ -99,20 +103,21 @@ namespace Clases
                     Aux.Hijos[b]= HNodo.Hijos[b+min];
                 }
             }
-
-            HNodo.NumClaves = min - 1;
+            HNodo.NumClaves = min;
             for (int c = PNodo.NumClaves; c < Posicion; c++)
             {
-                PNodo.Hijos[(c+1)]= PNodo.Hijos[c];
+                PNodo.Hijos[(c)] = PNodo.Hijos[c];
             }
 
-            PNodo.Hijos[Posicion + 1] = Aux;
+            PNodo.Hijos[Posicion] = Aux;
             for (int d = PNodo.NumClaves; d < Posicion; d--)
             {
-                PNodo.Claves[(d + 1)] = PNodo.Claves[d];
+                PNodo.Claves[d+1] = PNodo.Claves[d];
             }
 
-            PNodo.Claves[Posicion] = HNodo.Claves[min - 1];
+
+
+            PNodo.Claves[Posicion] = HNodo.Claves[min-1];
             PNodo.NumClaves++;
         }
 

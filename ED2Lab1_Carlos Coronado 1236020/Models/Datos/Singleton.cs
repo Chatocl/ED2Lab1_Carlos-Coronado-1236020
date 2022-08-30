@@ -12,7 +12,8 @@
            }
         }
 
-        public Clases.Arbol_B<Persona> ArbolB = new Clases.Arbol_B<Persona>(5);
+        //public Clases.Arbol_B<Persona> ArbolB = new Clases.Arbol_B<Persona>(5);
+        public Clases.Arbol_AVL<Persona> ArbolAVL = new Clases.Arbol_AVL<Persona>();
      
     }
 }

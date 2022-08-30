@@ -7,21 +7,26 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.VisualBasic.FileIO;
 
 namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private IHostingEnvironment Environment;
+        public HomeController(IHostingEnvironment _environment)
         {
-            _logger = logger;
+            Environment = _environment;
+
         }
 
         public IActionResult Index()
         {
-            return View(Singleton.Instance.ArbolB.ObtenerLista());
+            return View(Singleton.Instance.ArbolAVL.ObtenerLista());
         }
 
         public IActionResult Privacy()
@@ -33,6 +38,59 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public ActionResult CargarArchivo(IFormFile File)
+        {
+    
+            try
+            {
+                string Ope = "";
+                Persona AuxPer = new Persona();
+               
+
+                if (File != null)
+                {
+                    string path = Path.Combine(this.Environment.WebRootPath, "Uploads");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    string FileName = Path.GetFileName(File.FileName);
+                    string FilePath = Path.Combine(path, FileName);
+                    using (FileStream stream = new FileStream(FilePath, FileMode.Create))
+                    {
+                        File.CopyTo(stream);
+                    }
+                    using (TextFieldParser csvFile = new TextFieldParser(FilePath))
+                    {
+
+                        csvFile.CommentTokens = new string[] { "#" };
+                        csvFile.SetDelimiters(new string[] { ";" });
+                        csvFile.HasFieldsEnclosedInQuotes = true;
+                       
+                        csvFile.ReadLine();
+
+                        while (!csvFile.EndOfData)
+                        {
+                            string[] fields = csvFile.ReadFields();
+                            Ope = fields[0];
+                            Persona Aux= JsonSerializer.Deserialize<Persona>(fields[1]);
+                            if (Ope=="INSERT")
+                            {
+                                Singleton.Instance.ArbolAVL.Add(Aux);
+                            }
+                        }
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ViewData["Message"] = "Algo sucedio mal";
+                return RedirectToAction(nameof(Index));
+
+            }
         }
     }
 }
