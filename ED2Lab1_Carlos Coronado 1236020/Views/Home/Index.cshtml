@@ -9,6 +9,17 @@
     <input type="file" name="File"  value="Seleccionar archivo" class="btn btn-outline-secondary"/>
     <input type="submit" value="Importar" class="btn btn-outline-secondary" />
 </form>
+<div class="form-inline">
+    <form asp-action="BuscDPI" method="post">
+        <input name="BuscDPI" type="search" class="form-control me-2" placeholder="CUI" />
+        <button type="submit" class="btn btn-outline-success">Buscar</button>
+    </form>
+    <form asp-action="BuscName" method="post">
+        <input name="BuscName" type="search" class="form-control me-2" placeholder="Núm serie" />
+        <button type="submit" class="btn btn-outline-success">Buscar</button>
+    </form>
+
+</div>
 
 <table class="table">
     <thead style="background-color: #293241 ">
