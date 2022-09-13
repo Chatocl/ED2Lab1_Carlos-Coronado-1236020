@@ -16,6 +16,8 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
     public class HomeController : Controller
     {
         private IHostingEnvironment Environment;
+       
+      
         public HomeController(IHostingEnvironment _environment)
         {
             Environment = _environment;
@@ -83,8 +85,25 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                             string[] fields = csvFile.ReadFields();
                             Ope = fields[0];
                             Persona Aux= JsonSerializer.Deserialize<Persona>(fields[1]);
+                            Aux.codificacion = new string[Aux.companies.Length];
+                            Aux.decodificacion = new string[Aux.companies.Length];
+                            
                             if (Ope=="INSERT")
                             {
+                                for (int i = 0; i < Aux.companies.Length; i++)
+                                {
+                                    string Acodi = Aux.companies[i] + " " + Aux.dpi;
+                                    List<int> encoding = Singleton.Instance.Codifi.Codificar(Acodi);
+                                    List<char> decode = Singleton.Instance.Codifi.Decodificar(encoding);
+                                    for (int a = 0; a < encoding.Count; a++)
+                                    {
+                                        Aux.codificacion[i] += Convert.ToString(encoding[a]);
+                                    }
+                                    for (int b = 0; b < decode.Count; b++)
+                                    {
+                                        Aux.decodificacion[i] += Convert.ToString(decode[b]);
+                                    }
+                                }
                                 Singleton.Instance.ArbolAVL.Add(Aux);
                             }
                             else if (Ope=="PATCH")
@@ -101,7 +120,9 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                                     dpi = Cambio.dpi,
                                     address = Cambio.address,
                                     datebirth = Cambio.datebirth,
-
+                                    companies = Cambio.companies,
+                                    codificacion=Cambio.codificacion,
+                                    decodificacion=Cambio.decodificacion
                                 };
                                 Singleton.Instance.ArbolAVL.Add(AuPersona);
                             }

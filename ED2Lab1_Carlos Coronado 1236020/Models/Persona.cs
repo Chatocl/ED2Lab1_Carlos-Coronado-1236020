@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ED2Lab1_Carlos_Coronado_1236020.Models
 {
-    public class Persona: IComparable<Persona>
+    public class Persona : IComparable<Persona>
     {
 
         public string name { get; set; }
@@ -17,6 +17,9 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Models
         [DataType(DataType.Date)]
         public DateTime? datebirth { get; set; }
         public string address { get; set; }
+        public string[] companies { get; set; }
+        public string[] codificacion { get; set; }
+        public string[] decodificacion { get; set; }
         public int CompareTo(Persona Otro) 
         {
             if(Otro == null) 
