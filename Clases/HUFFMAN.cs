@@ -144,6 +144,26 @@ namespace Clases
                 }
                 return AuxList;
             }
+        public  int binarioDecimal(long binario)
+        {
+
+            int numero = 0;
+            int digito = 0;
+            const int DIVISOR = 10;
+
+            for (long i = binario, j = 0; i > 0; i /= DIVISOR, j++)
+            {
+                digito = (int)i % DIVISOR;
+                if (digito != 1 && digito != 0)
+                {
+                    return -1;
+                }
+                numero += digito * (int)Math.Pow(2, j);
+            }
+
+            return numero;
+        }
+
     }
 
 }
