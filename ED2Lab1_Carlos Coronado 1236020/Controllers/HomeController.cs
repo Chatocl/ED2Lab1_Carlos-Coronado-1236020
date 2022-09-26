@@ -93,16 +93,15 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                                 for (int i = 0; i < Aux.companies.Length; i++)
                                 {
                                     string Acodi = Aux.companies[i] + " " + Aux.dpi;
-                                    List<int> encoding = Singleton.Instance.Codifi.Codificar(Acodi);
-                                    List<char> decode = Singleton.Instance.Codifi.Decodificar(encoding);
+                                    List<int> encoding = Singleton.Instance.CodiCartas.Comprimir(Acodi);
+                                    string decode = Singleton.Instance.CodiCartas.Descomprimir(encoding);
                                     for (int a = 0; a < encoding.Count; a++)
                                     {
                                         Aux.codificacion[i] += Convert.ToString(encoding[a]);
                                     }
-                                    for (int b = 0; b < decode.Count; b++)
-                                    {
-                                        Aux.decodificacion[i] += Convert.ToString(decode[b]);
-                                    }
+
+                                    Aux.decodificacion[i] = decode;
+                                    
                                 }
                                 Singleton.Instance.ArbolAVL.Add(Aux);
                             }
