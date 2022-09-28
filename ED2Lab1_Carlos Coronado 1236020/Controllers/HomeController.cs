@@ -56,8 +56,15 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
             {
                 string Ope = "", Dpi = "";
                 Persona AuxPer = new Persona();
-               
-
+                string Aux1 = Path.Combine(this.Environment.WebRootPath, "Uploads");
+                string Aux2 = Path.Combine(Aux1, "inputs");
+                DirectoryInfo directory = new DirectoryInfo(Aux2);
+                FileInfo[] AuxCartas = directory.GetFiles("*.txt");
+                List<string> Cartas = new List<string>();
+                foreach (FileInfo file in AuxCartas)
+                {
+                    Cartas.Add(file.Name);
+                }
                 if (File != null)
                 {
                     string path = Path.Combine(this.Environment.WebRootPath, "Uploads");
@@ -87,6 +94,7 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                             Persona Aux= JsonSerializer.Deserialize<Persona>(fields[1]);
                             Aux.codificacion = new string[Aux.companies.Length];
                             Aux.decodificacion = new string[Aux.companies.Length];
+                            Aux.CarRecomen=new string[4];
                             
                             if (Ope=="INSERT")
                             {
@@ -94,14 +102,21 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                                 {
                                     string Acodi = Aux.companies[i] + " " + Aux.dpi;
                                     List<int> encoding = Singleton.Instance.CodiCartas.Comprimir(Acodi);
-                                    string decode = Singleton.Instance.CodiCartas.Descomprimir(encoding);
+                                    string decode = Singleton.Instance.CodiCartas.Descomprimir(encoding);   
                                     for (int a = 0; a < encoding.Count; a++)
                                     {
                                         Aux.codificacion[i] += Convert.ToString(encoding[a]);
                                     }
-
                                     Aux.decodificacion[i] = decode;
                                     
+                                }
+                                int pas = 1;
+                                int guardar = 0;
+                                while (Cartas.Contains("REC-" + Aux.dpi + "-" + pas + ".txt"))
+                                {
+                                    Aux.CarRecomen[guardar] = Cartas[Cartas.IndexOf("REC-" + Aux.dpi + "-" + pas + ".txt")];
+                                    pas++;
+                                    guardar++;
                                 }
                                 Singleton.Instance.ArbolAVL.Add(Aux);
                             }
