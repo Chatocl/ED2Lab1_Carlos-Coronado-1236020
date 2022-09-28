@@ -37,7 +37,66 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
             }
            
         }
+        public ActionResult Edit(string id)
+        {
+            List<int> encoding = new List<int>();
+            var viewPersona = Singleton.Instance.ArbolAVL.ObtenerLista().FirstOrDefault(a => a.dpi == id);
+            if (viewPersona.DECODI == false)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    string Aux1 = "";
+                    if (viewPersona.CarRecomen[i] != null)
+                    {
+                        Aux1 = Singleton.Instance.CodiCartas.Descomprimir(viewPersona.CarCod[i]);
+                        viewPersona.CarRecomen[i] = Aux1;
+                    }
+                }
 
+                viewPersona.DECODI = true;
+                viewPersona.CODI = false;
+            }
+
+            return View(viewPersona);
+        }
+        public ActionResult Details(string id)
+        {
+            List<int> encoding = new List<int>();
+            var viewPersona = Singleton.Instance.ArbolAVL.ObtenerLista().FirstOrDefault(a => a.dpi == id);
+            if (viewPersona.CODI==false)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    List<int> Aux1 = new List<int>();
+                    if (viewPersona.CarRecomen[i] != null)
+                    {
+                        Aux1 = Singleton.Instance.CodiCartas.Comprimir(viewPersona.CarRecomen[i]);
+                        viewPersona.CarCod[i] = Aux1;
+                    }
+                }
+                for (int a = 0; a < 4; a++)
+                {
+                    string Aux2 = "";
+                    if (viewPersona.CarCod[a]!=null)
+                    {
+                        for (int b = 0; b < viewPersona.CarCod[a].Count; b++)
+                        {
+                            Aux2 += viewPersona.CarCod[a][b].ToString();
+                            if (b % 50 == 0 && b != 0)
+                            {
+                                Aux2 += "\n";
+                            }
+                        }
+                        viewPersona.CarRecomen[a] = Aux2;
+                    }
+         
+                }
+                viewPersona.CODI = true;
+                viewPersona.DECODI = false;
+            }
+
+            return View(viewPersona);
+        }
         public IActionResult Privacy()
         {
             return View();
@@ -94,7 +153,8 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                             Persona Aux= JsonSerializer.Deserialize<Persona>(fields[1]);
                             Aux.codificacion = new string[Aux.companies.Length];
                             Aux.decodificacion = new string[Aux.companies.Length];
-                            Aux.CarRecomen=new string[4];
+                            Aux.CarRecomen = new string[4];
+                            Aux.CarCod = new List<int>[4];
                             
                             if (Ope=="INSERT")
                             {
@@ -114,10 +174,12 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                                 int guardar = 0;
                                 while (Cartas.Contains("REC-" + Aux.dpi + "-" + pas + ".txt"))
                                 {
-                                    Aux.CarRecomen[guardar] = Cartas[Cartas.IndexOf("REC-" + Aux.dpi + "-" + pas + ".txt")];
+                                    int PosCartas = Cartas.IndexOf("REC-" + Aux.dpi + "-" + pas + ".txt");
+                                    Aux.CarRecomen[guardar] = System.IO.File.ReadAllText(AuxCartas[PosCartas].ToString());
                                     pas++;
                                     guardar++;
                                 }
+                                Aux.CODI = false;
                                 Singleton.Instance.ArbolAVL.Add(Aux);
                             }
                             else if (Ope=="PATCH")
@@ -135,8 +197,12 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                                     address = Cambio.address,
                                     datebirth = Cambio.datebirth,
                                     companies = Cambio.companies,
-                                    codificacion=Cambio.codificacion,
-                                    decodificacion=Cambio.decodificacion
+                                    codificacion = Cambio.codificacion,
+                                    decodificacion = Cambio.decodificacion,
+                                    CarRecomen = Cambio.CarRecomen,
+                                    CarCod=Cambio.CarCod,
+                                    DECODI = Cambio.DECODI,
+                                    CODI = Cambio.CODI
                                 };
                                 Singleton.Instance.ArbolAVL.Add(AuPersona);
                             }
