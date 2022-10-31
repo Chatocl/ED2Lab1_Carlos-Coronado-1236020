@@ -9,42 +9,52 @@ namespace Clases
 {
     public class RSA
     {
-        RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(1024);
-        public string LLavePublica() 
+        public string LLavePublica()
         {
-            
-            var sw = new StringWriter();
-            var xs = new XmlSerializer(typeof(RSAParameters));
-            xs.Serialize(sw, rsa.ExportParameters(true));
-            return sw.ToString();
+            string llave = "";
+            int N = 0;
+            int Z = 0;
+
+            int Primo1 = Primo();
+            int Primo2 = Primo();
+
+            return llave;
         }
         public string LLavePrivada()
         {
-           
-            var sw = new StringWriter();
-            var xs = new XmlSerializer(typeof(RSAParameters));
-            xs.Serialize(sw, rsa.ExportParameters(false));
-            return sw.ToString();
+            string llave = "";
+            int Primo1 = Primo();
+            int Primo2 = Primo();
+            llave = Primo1.ToString() + "," + Primo2.ToString();
+            return llave;
         }
-        static byte[] cifrarRSA(string texto, string clavePublica)
+        internal int Primo()
         {
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(2048);
-            // La clave pública usada para cifrar el texto
-            rsa.FromXmlString(clavePublica);
-            // Convertimos la cadena a un array de bytes
-            byte[] datos = Encoding.Default.GetBytes(texto);
-            // Generamos los datos encriptados y los devolvemos
-            return rsa.Encrypt(datos, false);
-        }
-        static string descrifrarRSA(string claves, byte[] datosCifrados)
-        {
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(20);
-            // Las claves usadas para cifrar el texto
-            rsa.FromXmlString(claves);
-            // Generamos los datos desencriptados
-            byte[] datos = rsa.Decrypt(datosCifrados, false);
-            // Devolvemos la cadena original
-            return Encoding.Default.GetString(datos);
+            Random r = new Random();
+            bool EsPrimo = false;
+            int a = 0;
+            int num = 0;
+            while (!EsPrimo)
+            {
+                num = r.Next(0, 524288);
+                for (int i = 1; i < (num + 1); i++)
+                {
+                    if (a % i == 0)
+                    {
+                        a++;
+                    }
+                }
+                if (a != 2)
+                {
+                    EsPrimo = false;
+                }
+                else
+                {
+                    EsPrimo = true;
+                }
+
+            }
+            return num;
         }
     }
 }
