@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
@@ -37,7 +38,8 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
             }
            
         }
-        public ActionResult Edit(string id)
+
+        public ActionResult Edit(string id)//Descomprimir
         {
             List<int> encoding = new List<int>();
             var viewPersona = Singleton.Instance.ArbolAVL.ObtenerLista().FirstOrDefault(a => a.dpi == id);
@@ -59,7 +61,65 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
 
             return View(viewPersona);
         }
-        public ActionResult Details(string id)
+        public ActionResult CesarDescom(string id)//Cifrar
+        {
+            List<int> encoding = new List<int>();
+            var viewPersona = Singleton.Instance.ArbolAVL.ObtenerLista().FirstOrDefault(a => a.dpi == id);
+            if (viewPersona.DECODI == false)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    string Aux1 = "";
+                    if (viewPersona.CarRecomen[i] != null)
+                    {
+                        Aux1 = Singleton.Instance.CodiCover.Cifrar(viewPersona.Conv[i], "Contraseñ");
+                        viewPersona.Conv[i] = Aux1;
+                    }
+                }
+
+                viewPersona.DECODI2 = true;
+                viewPersona.CODI2 = false;
+            }
+
+            return View(viewPersona);
+        }
+        public ActionResult CesarCom(string id)//Descomprimir
+        {
+            List<int> encoding = new List<int>();
+            var viewPersona = Singleton.Instance.ArbolAVL.ObtenerLista().FirstOrDefault(a => a.dpi == id);
+            if (viewPersona.CODI2 == false)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    string Aux1 = "";
+                    string Aux2 = "";
+                    if (viewPersona.CarRecomen[i] != null)
+                    {
+                        Aux1 = Singleton.Instance.CodiCover.Descifrar(viewPersona.Conv[i],"Contraseñ");
+                        foreach (var Char in Aux1)
+                        {
+                            if (Char=='.')
+                            {
+                                Aux2 += Char;
+                                Aux2 += "\n";
+                            }
+                            else if (Char!='\r' && Char != '\n')
+                            {
+                                Aux2 += Char;
+                            }
+                           
+                        }
+                            viewPersona.Conv[i] = Aux2;
+                    }
+                }
+
+                viewPersona.CODI2 = true;
+                viewPersona.DECODI2 = false;
+            }
+
+            return View(viewPersona);
+        }
+        public ActionResult Details(string id)//Comprimir
         {
             List<int> encoding = new List<int>();
             var viewPersona = Singleton.Instance.ArbolAVL.ObtenerLista().FirstOrDefault(a => a.dpi == id);
@@ -95,6 +155,24 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                 viewPersona.DECODI = false;
             }
 
+            return View(viewPersona);
+        }
+        public ActionResult MosLlaves(string id)//Cifrar
+        {
+            List<int> encoding = new List<int>();
+            var viewPersona = Singleton.Instance.ArbolAVL.ObtenerLista().FirstOrDefault(a => a.dpi == id);
+            return View(viewPersona);
+        }
+        public ActionResult RSACif(string id)//Cifrar
+        {
+            List<int> encoding = new List<int>();
+            var viewPersona = Singleton.Instance.ArbolAVL.ObtenerLista().FirstOrDefault(a => a.dpi == id);
+            return View(viewPersona);
+        }
+        public ActionResult RSADeCif(string id)//Descomprimir
+        {
+            List<int> encoding = new List<int>();
+            var viewPersona = Singleton.Instance.ArbolAVL.ObtenerLista().FirstOrDefault(a => a.dpi == id);
             return View(viewPersona);
         }
         public IActionResult Privacy()
@@ -153,8 +231,10 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                             Persona Aux= JsonSerializer.Deserialize<Persona>(fields[1]);
                             Aux.codificacion = new string[Aux.companies.Length];
                             Aux.decodificacion = new string[Aux.companies.Length];
+                            Aux.LlavesPriv=new string[Aux.companies.Length];
                             Aux.CarRecomen = new string[4];
                             Aux.CarCod = new List<int>[4];
+                            Aux.Conv=new string[4];
                             
                             if (Ope=="INSERT")
                             {
@@ -168,8 +248,10 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                                         Aux.codificacion[i] += Convert.ToString(encoding[a]);
                                     }
                                     Aux.decodificacion[i] = decode;
+                                    Aux.LlavesPriv[i] = Singleton.Instance.RsaCodifi.LLavePrivada();
                                     
                                 }
+                                Aux.LLavePub= Singleton.Instance.RsaCodifi.LLavePublica();
                                 int pas = 1;
                                 int guardar = 0;
                                 while (Cartas.Contains("REC-" + Aux.dpi + "-" + pas + ".txt"))
@@ -179,7 +261,17 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                                     pas++;
                                     guardar++;
                                 }
+                                int pas2 = 1;
+                                int guardar2 = 0;
+                                while (Cartas.Contains("CONV-" + Aux.dpi + "-" + pas2 + ".txt"))
+                                {
+                                    int PosCartas = Cartas.IndexOf("CONV-" + Aux.dpi + "-" + pas2 + ".txt");
+                                    Aux.Conv[guardar2] = System.IO.File.ReadAllText(AuxCartas[PosCartas].ToString());
+                                    pas2++;
+                                    guardar2++;
+                                }
                                 Aux.CODI = false;
+                                Aux.CODI2=false;
                                 Singleton.Instance.ArbolAVL.Add(Aux);
                             }
                             else if (Ope=="PATCH")
@@ -201,8 +293,15 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                                     decodificacion = Cambio.decodificacion,
                                     CarRecomen = Cambio.CarRecomen,
                                     CarCod=Cambio.CarCod,
+                                    LLavePub = Cambio.LLavePub,
+                                    LlavesPriv = Cambio.LlavesPriv,
+                                    recluiter = Cambio.recluiter,
                                     DECODI = Cambio.DECODI,
-                                    CODI = Cambio.CODI
+                                    CODI = Cambio.CODI,
+                                    Conv=Cambio.Conv,
+                                    DECODI2 = Cambio.DECODI2,
+                                    CODI2 = Cambio.CODI2,
+
                                 };
                                 Singleton.Instance.ArbolAVL.Add(AuPersona);
                             }
@@ -222,7 +321,6 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
 
             }
         }
-
         public ActionResult BuscDPI(string BuscDPI)
         {
             try

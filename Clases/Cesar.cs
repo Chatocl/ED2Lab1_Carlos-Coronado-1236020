@@ -34,29 +34,28 @@ namespace Clases
         }
         public string Descifrar(string decode, string key)
         {
-            Dictionary<char, int> cipher = new Dictionary<char, int>();
+            Dictionary<char, int> Dic = new Dictionary<char, int>();
             //nuevo abecedario
             for (int i = 0; i < key.Length; i++)
             {
-                if (!cipher.ContainsValue(key[i]))
+                if (!Dic.ContainsValue(key[i]))
                 {
-                    cipher.Add(key[i], cipher.Count);
+                    Dic.Add(key[i], Dic.Count);
                 }
             }
             for (int i = 0; i < 256; i++)
             {
-                if (!cipher.ContainsKey(Convert.ToChar(i)))
+                if (!Dic.ContainsKey(Convert.ToChar(i)))
                 {
-                    cipher.Add(Convert.ToChar(i), cipher.Count);
+                    Dic.Add(Convert.ToChar(i), Dic.Count);
                 }
             }
             //descifrado
             string descifrado = "";
             foreach (char l in decode)
             {
-                descifrado += Convert.ToChar(cipher[l]);
+                descifrado += Convert.ToChar(Dic[l]);
             }
-
             return descifrado;
         }
     }

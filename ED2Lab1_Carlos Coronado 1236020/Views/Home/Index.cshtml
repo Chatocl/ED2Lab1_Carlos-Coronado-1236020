@@ -28,6 +28,7 @@
             <th style="color:aliceblue">Nombre</th>
             <th style="color:aliceblue">Fecha de nacimiento</th>
             <th style="color:aliceblue">Dirección</th>
+            <th style="color:aliceblue">Reclutadores</th>
             <th style="color:aliceblue">Empresas</th>
             <th style="color:aliceblue">Decodificado</th>
             <th style="color:aliceblue">Encodificado</th>
@@ -50,6 +51,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.recluiter)
                 </td>
                 <td>
                      <select class="form-control">
@@ -77,6 +81,14 @@
                 </td>
                  <td>
                     @Html.ActionLink("Cartas", "Details", new { id = item.dpi}) 
+                </td>
+                <td>
+                    @Html.ActionLink("Conversaciones", "CesarDescom", new { id = item.dpi}) 
+                </td>
+                 <td>
+                    @Html.ActionLink("Llaves", "MosLlaves", new { id = item.dpi}) 
+                </td>
+                <td>
                 </td>
             </tr>
         }
