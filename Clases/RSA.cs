@@ -9,26 +9,55 @@ namespace Clases
 {
     public class RSA
     {
-        public string LLavePublica()
+        public List<int> LLaves()
         {
+            Random r = new Random();
+            Random r2 = new Random();
+            List<int> Valores  = new List<int>();
+            List<int> Kval = new List<int>();
+            int Primo1 = Primo();
+            int Primo2 = Primo();
             string llave = "";
+            int Aux = 0;
+            int Aux2 = 0;
             int N = 0;
             int Z = 0;
+            int K = 0;
+            int J = 0;
+           
 
-            int Primo1 = Primo();
-            int Primo2 = Primo();
-
-            return llave;
+            N = Primo1 * Primo2;
+            Z = (Primo1-1) * (Primo2-1);
+            for (int i = 1; i <Z; i++)
+            {
+                if (MCD(i,Z)==1)
+                {
+                    Kval.Add(i);
+                }
+            }
+            Aux = r.Next(0, Kval.Count-1);
+            K = Kval[Aux];
+            Aux2 = r2.Next(0, Kval.Count-1);
+            J = Kval[Aux2];
+            Valores.Add(N);
+            Valores.Add(K);
+            Valores.Add(J);
+            return Valores;
         }
-        public string LLavePrivada()
+        private int MCD(int num1,int num2) 
         {
-            string llave = "";
-            int Primo1 = Primo();
-            int Primo2 = Primo();
-            llave = Primo1.ToString() + "," + Primo2.ToString();
-            return llave;
+            int a=Math.Max(num1,num2);
+            int b=Math.Min(num1,num2);
+            int res = 0;
+            do
+            {
+                res = b;
+                b = a % b;
+                a = res;
+            } while (b!=0);
+            return res;
         }
-        internal int Primo()
+        private int Primo()
         {
             Random r = new Random();
             bool EsPrimo = false;
@@ -36,10 +65,11 @@ namespace Clases
             int num = 0;
             while (!EsPrimo)
             {
-                num = r.Next(0, 524288);
+                num = r.Next(0,1024);
+                a = 0;
                 for (int i = 1; i < (num + 1); i++)
                 {
-                    if (a % i == 0)
+                    if (num % i == 0)
                     {
                         a++;
                     }

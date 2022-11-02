@@ -198,6 +198,7 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                 DirectoryInfo directory = new DirectoryInfo(Aux2);
                 FileInfo[] AuxCartas = directory.GetFiles("*.txt");
                 List<string> Cartas = new List<string>();
+                
                 foreach (FileInfo file in AuxCartas)
                 {
                     Cartas.Add(file.Name);
@@ -232,6 +233,7 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                             Aux.codificacion = new string[Aux.companies.Length];
                             Aux.decodificacion = new string[Aux.companies.Length];
                             Aux.LlavesPriv=new string[Aux.companies.Length];
+                            Aux.IRsa= new List<int>[Aux.companies.Length];
                             Aux.CarRecomen = new string[4];
                             Aux.CarCod = new List<int>[4];
                             Aux.Conv=new string[4];
@@ -248,10 +250,14 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Controllers
                                         Aux.codificacion[i] += Convert.ToString(encoding[a]);
                                     }
                                     Aux.decodificacion[i] = decode;
-                                    Aux.LlavesPriv[i] = Singleton.Instance.RsaCodifi.LLavePrivada();
+                                    Aux.IRsa[i] = Singleton.Instance.RsaCodifi.LLaves();
                                     
                                 }
-                                Aux.LLavePub= Singleton.Instance.RsaCodifi.LLavePublica();
+                                Aux.LLavePub = Aux.IRsa[1][1].ToString() + "," + Aux.IRsa[1][0].ToString();
+                                for (int i = 0; i < Aux.companies.Length; i++)
+                                {
+                                    Aux.LlavesPriv[i] = Aux.IRsa[i][2].ToString() + "," + Aux.IRsa[1][0].ToString();
+                                }
                                 int pas = 1;
                                 int guardar = 0;
                                 while (Cartas.Contains("REC-" + Aux.dpi + "-" + pas + ".txt"))

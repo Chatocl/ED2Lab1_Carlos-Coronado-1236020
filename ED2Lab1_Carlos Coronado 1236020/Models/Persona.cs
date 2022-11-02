@@ -23,6 +23,7 @@ namespace ED2Lab1_Carlos_Coronado_1236020.Models
         public string[] Conv { get; set; }
         public string[] LlavesPriv { get; set; }
         public List<int>[] CarCod { get; set; }
+        public List<int>[] IRsa { get; set; }
         public string LLavePub { get; set; }
         public bool CODI { get; set; }
         public bool DECODI { get; set; }
